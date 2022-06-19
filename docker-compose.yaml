@@ -1,0 +1,20 @@
+version: "2"
+services:
+
+ hotrod:
+   image: docker.io/jaegertracing/example-hotrod:latest
+   ports:
+     - "8080:8080"
+   command: ["all"]
+   environment:
+     - JAEGER_AGENT_HOST=collector
+     - JAEGER_AGENT_PORT=6831
+
+ collector:
+   image: docker.io/otel/opentelemetry-collector:0.23.0
+   command: "--config /etc/otel-config.yaml"
+   environment:
+     - TEMPO_ENDPOINT=${TEMPO_ENDPOINT}
+     - TEMPO_AUTH_STRING=${TEMPO_AUTH_STRING}
+   volumes:
+     - ./otel-config.yaml:/etc/otel-config.yaml:z

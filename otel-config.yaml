@@ -1,0 +1,21 @@
+receivers:
+ jaeger:
+   protocols:
+     thrift_compact:
+
+processors:
+ batch:
+
+exporters:
+ otlp:
+   endpoint: ${TEMPO_ENDPOINT}
+   headers:
+     authorization: Basic ${TEMPO_AUTH_STRING}
+
+service:
+ pipelines:
+   traces:
+     receivers: [jaeger]
+     processors: [batch]
+     exporters: [otlp]
+
